@@ -42,11 +42,11 @@ backend
 │       ├── file1.pdf
 │       ├── file2.pdf
 ```
-4. Run the following command in the root directory of the repo:
+4. Run the following command in the root directory of the repo and wait for the containers to start:
 ```
 docker-compose up -d -f docker-compose.yml
 ```
-
+5. Access the frontend at `localhost:3000`
 
 ## Development
 
