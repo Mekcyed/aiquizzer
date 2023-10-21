@@ -6,14 +6,20 @@ from question_generator import generate_question
 app = Flask(__name__)
 cors  = CORS(app, origins="*")
 
-@app.route('/api/get/question/<collection_id>/<criteria>/<element>', methods=['GET'])
-def get_question(collection_id, criteria,  element):
+@app.route('/api/get/question/<collection_id>/<criteria>/<value>', methods=['GET'])
+def get_question(collection_id, criteria, value):
+    """
+    Generates a question based on the given collection ID, criteria, and value.
+    """
     chromadb_client, _ = get_chromadb_client()
-    embeddings = get_chromadb_embeddings(chromadb_client.get_collection(collection_id), criteria, element)
+    embeddings = get_chromadb_embeddings(chromadb_client.get_collection(collection_id), criteria, value)
     return generate_question(embeddings)
 
 @app.route('/api/get/collections', methods=['GET'])
 def get_collections():
+    """
+    Returns a list of collections in chromadb and their documents.
+    """
     _ , collections = get_chromadb_client()
     data = {"collections": {c.name: {} for c in collections}}
     for collection in collections:
