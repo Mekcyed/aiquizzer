@@ -3,7 +3,7 @@
 
 	import { onMount } from 'svelte';
 	import Button from './Button.svelte';
-	let name = 'Max';
+	let name = '';
 	let question = "";  // This will hold the response from the API
 	let topic = ""; 
 	let selectedAnswer = "";
