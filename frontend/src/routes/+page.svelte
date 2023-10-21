@@ -19,10 +19,23 @@
 	let criteria = "";
 	let element = "";
 	let questionQuantity = 2;
+	let counter = 0;
+	let counterInterval;
 
 	onMount(async () => {
         await fetchCollections();
     });
+
+	function startCounter() {
+		counter = 0;  // Reset the counter
+		counterInterval = setInterval(() => {
+			counter++;
+		}, 1000);  // Update the counter every 1 second (1000 milliseconds)
+	}
+
+	function stopCounter() {
+		clearInterval(counterInterval);
+	}
 
 	async function fetchCollections() {
 		try {
@@ -45,6 +58,7 @@
 	// This function will be called when the button is clicked
 	async function fetchData() {
 		loading_question = true;
+		startCounter();
 		questionQueue = [];
 		currentQuestionIndex = 0;
 		currentQuestion = null;
@@ -70,12 +84,17 @@
 				console.log(embeddings);
 				loadNextQuestion();
 			} else {
-				alert("Invalid API response.");
+				if (data?.error){
+					alert(data.error);
+				} else {
+					alert("Invalid API response.");
+				}
 			}
 		} catch (error) {
 			console.error("Error fetching data:", error);
 		} finally {
 			loading_question = false;
+			stopCounter();
 		}
 	}
 
@@ -149,6 +168,7 @@
 	</Button>
 	{#if loading_question}
 		<div class="loader"></div>
+		<div class="counter">Time elapsed: {counter} seconds</div>
 	{/if}	
 	{#if currentQuestion}
 	<div class="container question-container">
@@ -198,7 +218,10 @@
 		height: 50px;
 		animation: spin 2s linear infinite;
 	}
-
+	.counter {
+        margin-top: 10px;
+        font-size: 14px;
+    }
 	@keyframes spin {
 		0% { transform: rotate(0deg); }
 		100% { transform: rotate(360deg); }
