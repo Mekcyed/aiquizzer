@@ -6,14 +6,14 @@ from question_generator import generate_question
 app = Flask(__name__)
 cors  = CORS(app, origins="*")
 
-@app.route('/api/get/question/<collection_id>/<criteria>/<value>', methods=['GET'])
-def get_question(collection_id, criteria, value):
+@app.route('/api/get/question/<question_quantity>/<collection_id>/<criteria>/<value>', methods=['GET'])
+def get_question(question_quantity, collection_id, criteria, value):
     """
-    Generates a question based on the given collection ID, criteria, and value.
+    Generates n questions based on the given question_quantity, collection ID, criteria, and value.
     """
     chromadb_client, _ = get_chromadb_client()
     embeddings = get_chromadb_embeddings(chromadb_client.get_collection(collection_id), criteria, value)
-    return generate_question(embeddings)
+    return generate_question(question_quantity, embeddings)
 
 @app.route('/api/get/collections', methods=['GET'])
 def get_collections():

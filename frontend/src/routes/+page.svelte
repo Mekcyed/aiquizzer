@@ -4,7 +4,9 @@
 	import { onMount } from 'svelte';
 	import Button from './Button.svelte';
 	let name = '';
-	let question = "";  // This will hold the response from the API
+	let questionQueue = [];
+	let currentQuestionIndex = 0; 
+	let currentQuestion = null;
 	let topic = ""; 
 	let selectedAnswer = "";
 	let explanationText = "";
@@ -16,6 +18,7 @@
 	let pageNumber = "";
 	let criteria = "";
 	let element = "";
+	let questionQuantity = 2;
 
 	onMount(async () => {
         await fetchCollections();
@@ -42,7 +45,9 @@
 	// This function will be called when the button is clicked
 	async function fetchData() {
 		loading_question = true;
-		question = "";
+		questionQueue = [];
+		currentQuestionIndex = 0;
+		currentQuestion = null;
 		explanationText = "";
 		selectedAnswer = "";
 		if (topic != "") {
@@ -55,13 +60,15 @@
 			alert("Please enter a topic or filename and page number.");
 		}
 		try {
-			const result = await fetch(`http://127.0.0.1:5000/api/get/question/${collection}/${criteria}/${element}`);
+			const result = await fetch(`http://127.0.0.1:5000/api/get/question/${questionQuantity}/${collection}/${criteria}/${element}`);
 			const data = await result.json();
-			if (data?.response && data?.response?.embeddings && data?.response?.question) {
+			if (data?.response && data?.response?.embeddings && data?.response?.questions) {
 				console.log(data.response);
-				question = data?.response?.question[0];
-				console.log(question);
+				questionQueue = data?.response?.questions;
+				console.log(questionQueue);
 				embeddings = data.response.embeddings;
+				console.log(embeddings);
+				loadNextQuestion();
 			} else {
 				alert("Invalid API response.");
 			}
@@ -72,14 +79,37 @@
 		}
 	}
 
-	function checkAnswer() {
-		if (selectedAnswer == question.answer) {
-			explanationText = "Correct! " + question.explanation;
+	function loadNextQuestion() {
+		if (currentQuestionIndex < questionQueue.length) {
+			explanationText = ""; 
+			selectedAnswer = "";
+			currentQuestion = questionQueue[currentQuestionIndex];  
+        	currentQuestionIndex++; 
 		} else {
-			explanationText = "Incorrect! " + question.explanation;
+			alert("No more questions.");
 		}
 	}
 
+	function checkAnswer() {
+		if (selectedAnswer == currentQuestion.answer) {
+			explanationText = "Correct! " + currentQuestion.explanation;
+		} else {
+			explanationText = "Incorrect! " + currentQuestion.explanation;
+		}
+	}
+
+	function showNextQuestion() {
+		loadNextQuestion();  
+	}
+
+	function showPreviousQuestion() {
+		if (currentQuestionIndex > 1) {
+			currentQuestionIndex -= 2; 
+			loadNextQuestion(); 
+		} else {
+			alert("No previous questions.");
+		}
+	}
 </script>
 
 <div class="container">
@@ -106,6 +136,8 @@
         {/if}
         <p>Or enter a topic:</p>
         <input bind:value={topic} placeholder="Enter topic" />
+		<p>Enter the number of questions you want:</p>
+		<input bind:value={questionQuantity} placeholder=2 />
     </div>
 
 </div>
@@ -118,10 +150,10 @@
 	{#if loading_question}
 		<div class="loader"></div>
 	{/if}	
-	{#if question}
+	{#if currentQuestion}
 	<div class="container question-container">
-		<h2>{question.query}</h2>
-		{#each question.choices as choice, index}
+		<h2>{currentQuestion.query}</h2>
+		{#each currentQuestion.choices as choice, index}
 			<label class="choice-label">
 				<input type="radio" bind:group={selectedAnswer} value={index}>
 				{choice}
@@ -131,6 +163,12 @@
 			Submit
 		</Button>
 		<p class="explanation">{explanationText}</p>
+		<Button handleClick={showPreviousQuestion}>
+			Previous Question
+		</Button>
+		<Button handleClick={showNextQuestion}>
+			Next Question
+		</Button>
 		<p>	
 			Used Script {embeddings.metadatas[0].document} on Page {embeddings.metadatas[0].page}.<br />
 			Used Embeddings: {embeddings.documents[0]} 
