@@ -7,6 +7,12 @@ name = "pypi"
 flask = "*"
 psycopg2-binary = "*"
 openai = "*"
+flask-cors = "*"
+chromadb = "*"
+ipykernel = "*"
+pysqlite3-binary = "*"
+pypdf = "*"
+waitress = "*"
 
 [dev-packages]
 

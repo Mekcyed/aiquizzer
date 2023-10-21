@@ -1,3 +1,8 @@
 Flask
 psycopg2-binary
 openai
+pysqlite3-binary
+flask-cors
+chromadb
+pypdf
+waitress
