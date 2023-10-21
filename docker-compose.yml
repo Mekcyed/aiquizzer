@@ -3,8 +3,23 @@ services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./backend/.env
     ports:
       - "5000:5000"
+    networks:
+      - aiq_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
     networks:
       - aiq_network
 
