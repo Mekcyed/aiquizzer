@@ -6,12 +6,12 @@ Another ai playground project. Use the OpenAI API to generate multiple choice qu
 Prompt inspired by [this repo](https://github.com/quentin-mckay/AI-Quiz-Generator). Dockerfile for the frontend taken from [this gist](https://gist.github.com/AradAlvand/04b2cad14b00e5ffe8ec96a3afbb34fb).
 
 ## To do
+- [x] Refactor backend (Move chromdb and openai logic to separate files)
 - [ ] Function to automatically process new PDFs in chromadb while docker is running
 - [ ] Gamification (e.g. points for correct answers, emoji awards for streaks)
 - [ ] Error handling (e.g. if no questions are generated)
 - [ ] Exclude headers and footers from PDFs (tricky)
 - [ ] Add Qualitiy checks in question generation (Multiple API calls? Or use GPT 4?)
-- [ ] Refactor backend (Move chromdb and openai logic to separate files)
 - [ ] Refactor frontend (Undestand svelte, clean repo, make UI less ugly)
 - [ ] Add more question types (e.g. True/False, Fill in the blank)
 - [ ] Make docker use Pipfile for backend?
