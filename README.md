@@ -28,7 +28,7 @@ Prompt inspired by [this repo](https://github.com/quentin-mckay/AI-Quiz-Generato
 2. Create a `.env` file in the `./backend` directory with the following variables:
 ```
 OPENAI_API_KEY=<your key>
-TEXT_FILTER=<your filter> e.g. "University of Hanover; Pof. John Smith"
+TEXT_FILTER=<your filter>  # e.g. "University of Hanover; Pof. John Smith". These strings will be removed from the PDFs before they are sent to chromadb
 ```
 3. Create a `docs` directory in the `./backend` of the repo and add your PDF files to it. Example structure:
 ```
