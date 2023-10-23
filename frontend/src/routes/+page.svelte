@@ -39,7 +39,7 @@
 
 	async function fetchCollections() {
 		try {
-			const result = await fetch('http:///127.0.0.1:5000/api/get/collections');
+			const result = await fetch('http://localhost:5000/api/get/collections');
 			const data = await result.json();
 			
 			// Check if the data contains a 'collections' object and then if the expected sub-structures are present
@@ -74,7 +74,7 @@
 			alert("Please enter a topic or filename and page number.");
 		}
 		try {
-			const result = await fetch(`http://127.0.0.1:5000/api/get/question/${questionQuantity}/${collection}/${criteria}/${element}`);
+			const result = await fetch(`http://localhost:5000/api/get/question/${questionQuantity}/${collection}/${criteria}/${element}`);
 			const data = await result.json();
 			if (data?.response && data?.response?.embeddings && data?.response?.questions) {
 				console.log(data.response);

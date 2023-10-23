@@ -40,5 +40,8 @@ def success():
     return jsonify({"message": " success"})
 
 if __name__ == '__main__':
-    from waitress import serve
-    serve(app,host='0.0.0.0', port=5000)
+    # deactivating waitress for now due to HTTPS issues
+    #from waitress import serve
+    #serve(app,host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)
+

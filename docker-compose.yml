@@ -8,8 +8,6 @@ services:
       - ./backend/.env
     ports:
       - "5000:5000"
-    networks:
-      - aiq_network
     volumes:
       - ./backend/docs:/app/docs
 
@@ -19,8 +17,3 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    networks:
-      - aiq_network
-
-networks:
-  aiq_network:
