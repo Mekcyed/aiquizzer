@@ -173,7 +173,7 @@
 	{#if currentQuestion}
 	<div class="container question-container">
 		<h2>{currentQuestion.query}</h2>
-		{#each currentQuestion.choices as choice, index}
+		{#each currentQuestion.choices as choice, index (choice)}
 			<label class="choice-label">
 				<input type="radio" bind:group={selectedAnswer} value={index}>
 				{choice}
