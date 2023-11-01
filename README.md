@@ -7,6 +7,7 @@ Prompt inspired by [this repo](https://github.com/quentin-mckay/AI-Quiz-Generato
 
 ## To do
 - [x] Refactor backend (Move chromdb and openai logic to separate files)
+- [ ] Add logging with loguru
 - [ ] Function to automatically process new PDFs in chromadb while docker is running
 - [ ] Gamification (e.g. points for correct answers, emoji awards for streaks)
 - [ ] Error handling (e.g. if no questions are generated)
