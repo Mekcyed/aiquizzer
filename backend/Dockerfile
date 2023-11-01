@@ -6,10 +6,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # copy folder docs
 COPY docs ./docs
 COPY app.py .
-COPY chromadb_init.py .
 COPY chromadb_handler.py .
 COPY question_generator.py .
 
 EXPOSE 5000
-RUN python chromadb_init.py
 CMD ["python", "app.py"]

@@ -10,6 +10,7 @@ services:
       - "5000:5000"
     volumes:
       - ./backend/docs:/app/docs
+      - ./backend/logs:/app/logs
 
   frontend:
     build:
