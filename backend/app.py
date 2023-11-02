@@ -6,7 +6,8 @@ from question_generator import generate_question
 
 app = Flask(__name__)
 cors  = CORS(app, origins="*")
-logger.add("./logs/backend.log", rotation="250 MB")
+logger.add("./logs/backend.log", rotation="1000 MB")
+logger.add("./logs/api.log", filter = "question_generator")
 
 @app.errorhandler(Exception)
 def handle_exception(e):

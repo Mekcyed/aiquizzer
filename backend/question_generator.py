@@ -1,6 +1,7 @@
 import openai
 import os
 from flask import jsonify
+from loguru import logger
 
 def get_openai_chat_completion(model, system_prompt, prompt):
     """
@@ -17,7 +18,8 @@ def get_openai_chat_completion(model, system_prompt, prompt):
     )
     except Exception as e:
         raise e
-
+    
+    logger.info(f"Chat Completion: {system_prompt=}, {prompt=}, {response=}")
     return response
 
 def generate_question(question_quantity, embeddings):
@@ -39,16 +41,10 @@ def generate_question(question_quantity, embeddings):
             Verify that the answer is correct by comparing the choices and explanations with the question."""
         system_prompt = 'You\'re a quiz bot generating questions from lecture slide embeddings. The user is a student preparing for an exam using these embeddings'
         response = get_openai_chat_completion('gpt-3.5-turbo-16k', system_prompt, prompt)
-        print(response)
-
-        if response is None:
-            return jsonify({"response": "Error"})
-
         response_content = eval(response.choices[0]['message']['content'])
         response_content['embeddings'] = embeddings
         data_dict = {"response": response_content}
     except Exception as e:
-        print(e)
         data_dict = {"response": "Error", "error": str(e)}
     
     return jsonify(data_dict)
