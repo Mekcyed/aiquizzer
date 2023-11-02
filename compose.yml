@@ -7,10 +7,9 @@ services:
     env_file:
       - ./backend/.env
     ports:
-      - "5000:5000"
+      - "5555:5555"
     volumes:
       - ./backend/docs:/app/docs
-      - ./backend/logs:/app/logs
 
   frontend:
     build:
@@ -18,3 +17,5 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    depends_on:
+      - backend

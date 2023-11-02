@@ -9,5 +9,5 @@ COPY app.py .
 COPY chromadb_handler.py .
 COPY question_generator.py .
 
-EXPOSE 5000
+EXPOSE 5555
 CMD ["python", "app.py"]
