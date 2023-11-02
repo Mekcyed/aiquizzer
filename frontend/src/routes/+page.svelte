@@ -3,6 +3,7 @@
 
 	import { onMount } from 'svelte';
 	import Button from './Button.svelte';
+	let backendEndpoint = 'http://localhost:5555';
 	let name = '';
 	let questionQueue = [];
 	let currentQuestionIndex = 0; 
@@ -13,6 +14,7 @@
 	let collection = "";
 	let collections = [];
 	let loading_question = false;
+	let loading_database = false;
 	let embeddings = ""; 
 	let filename = "";
 	let pageNumber = "";
@@ -39,7 +41,7 @@
 
 	async function fetchCollections() {
 		try {
-			const result = await fetch('http://localhost:5555/api/get/collections');
+			const result = await fetch(`${backendEndpoint}/api/get/collections`);
 			const data = await result.json();
 			
 			// Check if the data contains a 'collections' object and then if the expected sub-structures are present
@@ -74,7 +76,7 @@
 			alert("Please enter a topic or filename and page number.");
 		}
 		try {
-			const result = await fetch(`http://localhost:5555/api/get/question/${questionQuantity}/${collection}/${criteria}/${element}`);
+			const result = await fetch(`${backendEndpoint}/api/get/question/${questionQuantity}/${collection}/${criteria}/${element}`);
 			const data = await result.json();
 			if (data?.response && data?.response?.embeddings && data?.response?.questions) {
 				console.log(data.response);
@@ -96,6 +98,30 @@
 			loading_question = false;
 			stopCounter();
 		}
+	}
+
+	async function updateDatabase(){
+		startCounter();
+		loading_database = true;
+		try {
+			const result = await fetch(`${backendEndpoint}/api/update/database`);
+			const data = await result.json();
+			if (data?.response) {
+				alert(data.response);
+			} else {
+				if (data?.error){
+					alert(data.error);
+				} else {
+					alert("Invalid API response.");
+				}
+			}
+		} catch (error) {
+			console.error("Error fetching data:", error);
+		} finally {
+			loading_database = false;
+			stopCounter();
+		}
+
 	}
 
 	function loadNextQuestion() {
@@ -200,9 +226,13 @@
 		<Button handleClick={() => document.body.classList.toggle('dark-mode')}>
 			Toggle Dark Mode
 		</Button>
-		<Button handleClick={() => console.log("Hello")}>
-			Hello
+		<Button handleClick={() => updateDatabase()}>
+			Update Database
 		</Button>
+		{#if loading_database}
+			<div class="loader"></div>
+			<div class="counter">Time elapsed: {counter} seconds</div>
+		{/if}
 	</div>
 </div>
 
